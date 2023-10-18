@@ -1,4 +1,4 @@
-package se.kth.arafatul.laboration4;
+package se.kth.arafatul.labb4;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

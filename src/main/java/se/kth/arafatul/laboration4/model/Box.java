@@ -22,7 +22,7 @@ public class Box {
         return userChoice;
     }
 
-    public void setVisible(boolean visibility) {
+    public void setVisibility(boolean visibility) {
         this.visibility = visibility;
     }
 
