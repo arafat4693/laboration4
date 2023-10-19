@@ -1,6 +1,8 @@
 package se.kth.arafatul.laboration4.model;
 
-public class Box {
+import java.io.Serializable;
+
+public class Box implements Serializable {
     private boolean visibility;
     private int correctValue;
     private int userChoice;

@@ -19,26 +19,47 @@ public class SudokuBoard {
         this(SudokuUtilities.SudokuLevel.EASY);
     }
 
+
+    /**
+     * Starts a new game by initializing the Sudoku board and filling it with a new puzzle.
+     */
     public void newGame(){
         this.board = new Box[SudokuUtilities.GRID_SIZE][SudokuUtilities.GRID_SIZE];
         fillMatrix();
     }
 
+    /**
+     * Sets the Sudoku game difficulty level to EASY and starts a new game with an easy-level puzzle.
+     */
     public void easyLevel(){
         this.level = SudokuUtilities.SudokuLevel.EASY;
         this.newGame();
     }
 
+    /**
+     * Sets the Sudoku game difficulty level to MEDIUM and starts a new game with an medium-level puzzle.
+     */
     public void mediumLevel(){
         this.level = SudokuUtilities.SudokuLevel.MEDIUM;
         this.newGame();
     }
 
+    /**
+     * Sets the Sudoku game difficulty level to HARD and starts a new game with an hard-level puzzle.
+     */
     public void hardLevel(){
         this.level = SudokuUtilities.SudokuLevel.HARD;
         this.newGame();
     }
 
+    /**
+     * Updates the value of a Sudoku box at the specified row and column if the box is modifiable.
+     *
+     * @param row   The row index of the Sudoku box to update.
+     * @param col   The column index of the Sudoku box to update.
+     * @param value The new value to set for the Sudoku box.
+     * @return {@code true} if the box was successfully updated, {@code false} if the box is not modifiable.
+     */
     public boolean updateBox(int row, int col, int value){
         Box box = this.board[row][col];
         if((box.getUserChoice() == 0 && box.getVisibility()) || (box.getUserChoice() != 0 && box.getVisibility())) return false;
@@ -47,6 +68,12 @@ public class SudokuBoard {
         return true;
     }
 
+    /**
+     * Clears the value of a Sudoku box at the specified row and column if the box is modifiable.
+     *
+     * @param row The row index of the Sudoku box to clear.
+     * @param col The column index of the Sudoku box to clear.
+     */
     public void clearBox(int row, int col){
         Box box = this.board[row][col];
         if(box.getUserChoice() == 0) return;
@@ -54,6 +81,9 @@ public class SudokuBoard {
         box.setVisibility(false);
     }
 
+    /**
+     * Clears the values of all Sudoku boxes in the game, making them empty and non-visible.
+     */
     public void clearAllBoxes(){
         for (int row = 0; row < SudokuUtilities.GRID_SIZE; row++) {
             for (int col = 0; col < SudokuUtilities.GRID_SIZE; col++) {
@@ -62,6 +92,11 @@ public class SudokuBoard {
         }
     }
 
+    /**
+     * Shows a hint by revealing the value of a random empty Sudoku box, provided that the puzzle is not completely filled.
+     *
+     * @return {@code true} if a hint was shown, {@code false} if the puzzle is already completely filled.
+     */
     public boolean showHint(){
         if(isCompletelyFilled()) return false;
 
@@ -89,6 +124,11 @@ public class SudokuBoard {
         }
     }
 
+    /**
+     * Checks if the Sudoku puzzle is completely filled, meaning that all boxes are visible.
+     *
+     * @return {@code true} if the puzzle is completely filled, {@code false} otherwise.
+     */
     public boolean isCompletelyFilled(){
         for (int row = 0; row < SudokuUtilities.GRID_SIZE; row++) {
             for (int col = 0; col < SudokuUtilities.GRID_SIZE; col++) {
@@ -99,6 +139,11 @@ public class SudokuBoard {
         return true;
     }
 
+    /**
+     * Checks if the current state of the Sudoku board is correct, where each user choice matches the correct value.
+     *
+     * @return {@code true} if the Sudoku board is correct, {@code false} if there are discrepancies in user choices.
+     */
     public boolean checkBoard() {
         for (int row = 0; row < SudokuUtilities.GRID_SIZE; row++) {
             for (int col = 0; col < SudokuUtilities.GRID_SIZE; col++) {
@@ -130,12 +175,14 @@ public class SudokuBoard {
 
         for (int row = 0; row < SudokuUtilities.GRID_SIZE; row++) {
             for (int col = 0; col < SudokuUtilities.GRID_SIZE; col++) {
-                Box box = this.board[row][col];
-//                copy[row][col] = new Box(box.getVisibility(), box.getCorrectValue());
-                copy[row][col] = box;
+                copy[row][col] = this.board[row][col];
             }
         }
 
         return copy;
+    }
+
+    public void setBoard(Box[][] board){
+        this.board = board;
     }
 }

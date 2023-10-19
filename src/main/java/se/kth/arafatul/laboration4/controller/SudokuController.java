@@ -3,7 +3,10 @@ package se.kth.arafatul.laboration4.controller;
 import javafx.scene.control.Alert;
 import se.kth.arafatul.laboration4.model.Box;
 import se.kth.arafatul.laboration4.model.SudokuBoard;
+import se.kth.arafatul.laboration4.model.SudokuFileManagement;
 import se.kth.arafatul.laboration4.view.SudokuView;
+
+import java.io.IOException;
 
 public class SudokuController {
     private SudokuBoard model;
@@ -20,7 +23,6 @@ public class SudokuController {
     }
 
     public void handleExit() {
-        // TODO: save drawing to file before exit
         System.exit(0);
     }
 
@@ -88,5 +90,24 @@ public class SudokuController {
     public void onClear(){
         this.model.clearAllBoxes();
         view.getGridView().newGameUpdate();
+    }
+
+    public void onSaveFile() {
+        try{
+            SudokuFileManagement.serializeToFile(this.model.getBoard());
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+            this.view.showAlert(e.getMessage());
+        }
+    }
+
+    public void onLoadFile() {
+        try{
+            this.model.setBoard(SudokuFileManagement.deSerializeFromFile());
+            view.getGridView().newGameUpdate();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            this.view.showAlert(e.getMessage());
+        }
     }
 }

@@ -1,12 +1,15 @@
 package se.kth.arafatul.laboration4;
 
-public class SudokuUtilities {
+import java.util.Random;
 
+public class SudokuUtilities {
+    private static Random random = new Random();
     public enum SudokuLevel {EASY, MEDIUM, HARD}
 
     public static final int GRID_SIZE = 9;
     public static final int SECTIONS_PER_ROW = 3;
     public static final int SECTION_SIZE = 3;
+    public static int PREV_CHOICE = random.nextInt(4);
 
     /**
      * Create a 3-dimensional matrix with initial values and solution in Sudoku.
@@ -26,7 +29,94 @@ public class SudokuUtilities {
             case HARD: representationString = hard; break;
             default: representationString = medium;
         }
-        return convertStringToIntMatrix(representationString);
+
+        int[][][] matrix = convertStringToIntMatrix(representationString);
+
+        shuffleMatrix(matrix, random);
+
+        return matrix;
+    }
+
+    /**
+     * Shuffles a Sudoku puzzle matrix using a random transformation.
+     *
+     * @param matrix The Sudoku puzzle matrix to be shuffled.
+     * @param random An instance of the Random class used for randomization.
+     */
+    private static void shuffleMatrix(int[][][] matrix, Random random) {
+        int choice = random.nextInt(4);
+
+        do{
+            choice = random.nextInt(4);
+        }while(choice == PREV_CHOICE);
+
+        PREV_CHOICE = choice;
+
+        switch (choice) {
+            case 0:
+                mirrorHorizontally(matrix);
+                break;
+            case 1:
+                mirrorVertically(matrix);
+                break;
+            case 2:
+                swapNumberPairs(matrix, random);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private static void mirrorHorizontally(int[][][] matrix) {
+        for (int row = 0; row < GRID_SIZE; row++) {
+            for (int col = 0; col < GRID_SIZE / 2; col++) {
+                int temp = matrix[row][col][0];
+                matrix[row][col][0] = matrix[row][GRID_SIZE - col - 1][0];
+                matrix[row][GRID_SIZE - col - 1][0] = temp;
+
+                int ans = matrix[row][col][1];
+                matrix[row][col][1] = matrix[row][GRID_SIZE - col - 1][1];
+                matrix[row][GRID_SIZE - col - 1][1] = ans;
+            }
+        }
+    }
+
+    private static void mirrorVertically(int[][][] matrix) {
+        for (int row = 0; row < GRID_SIZE / 2; row++) {
+            for (int col = 0; col < GRID_SIZE; col++) {
+                int temp = matrix[row][col][0];
+                matrix[row][col][0] = matrix[GRID_SIZE - row - 1][col][0];
+                matrix[GRID_SIZE - row - 1][col][0] = temp;
+
+                int ans = matrix[row][col][1];
+                matrix[row][col][1] = matrix[GRID_SIZE - row - 1][col][1];
+                matrix[GRID_SIZE - row - 1][col][1] = ans;
+            }
+        }
+    }
+
+    private static void swapNumberPairs(int[][][] matrix, Random random) {
+        int num1 = random.nextInt(9) + 1;  // Randomly select the first number to swap
+        int num2;
+        do {
+            num2 = random.nextInt(9) + 1;  // Randomly select a different number
+        } while (num2 == num1);
+
+        for (int row = 0; row < GRID_SIZE; row++) {
+            for (int col = 0; col < GRID_SIZE; col++) {
+                if (matrix[row][col][0] == num1) {
+                    matrix[row][col][0] = num2;
+                } else if (matrix[row][col][0] == num2) {
+                    matrix[row][col][0] = num1;
+                }
+
+                if (matrix[row][col][1] == num1) {
+                    matrix[row][col][1] = num2;
+                } else if (matrix[row][col][1] == num2) {
+                    matrix[row][col][1] = num1;
+                }
+            }
+        }
     }
 
     /**

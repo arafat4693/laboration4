@@ -20,6 +20,8 @@ public class MenuView {
         MenuItem saveGame = new MenuItem("Save game");
         MenuItem exitGame = new MenuItem("Exit");
 
+        loadGame.addEventHandler(ActionEvent.ACTION, e -> controller.onLoadFile());
+        saveGame.addEventHandler(ActionEvent.ACTION, e -> controller.onSaveFile());
         exitGame.addEventHandler(ActionEvent.ACTION, e -> controller.handleExit());
 
         fileMenu.getItems().addAll(loadGame, saveGame, exitGame);
